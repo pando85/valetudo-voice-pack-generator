@@ -10,8 +10,10 @@ with unique voice prompts tailored to your preferences.
 
 ```bash
 mkdir -p data/original
-scp -O -r root@{{ valetudo_ip }}:/audio/EN data/original/
+scp -O -r root@{{ valetudo_ip }}:{{ robot_audio_files }} data/original/
 ```
+
+**Note**: In my case, robot audio files are under `/audio/EN`
 
 ## Speak to text
 
