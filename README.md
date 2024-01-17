@@ -1,6 +1,10 @@
 # Valetudo voice package generator
 
-This repository contains a collection of scripts designed to simplify the creation of custom voice packages for Valetudo, a vacuum cleaner robot middleware. Leveraging the Whisper and Piper TTS libraries, these scripts enable users to generate personalized voice packages by converting text to speech and integrating them seamlessly into the Valetudo system. Enhance your vacuuming experience with unique voice prompts tailored to your preferences.
+This repository contains a collection of scripts designed to simplify the creation of custom voice
+packages for Valetudo, a vacuum cleaner robot middleware. Leveraging the Whisper and Piper TTS
+libraries, these scripts enable users to generate personalized voice packages by converting text to
+speech and integrating them seamlessly into the Valetudo system. Enhance your vacuuming experience
+with unique voice prompts tailored to your preferences.
 
 ## Get files from robot
 
@@ -27,6 +31,9 @@ curl -LO 'https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/ry
 pip install piper-tts
 ./voice-generator.sh -m en_US-ryan-high.onnx
 
-tar -czf voice_pack.tar.gz data/output/EN/*.ogg
+tar -czf voice_pack.tar.gz -C data/output/EN/ .
 md5sum voice_pack.tar.gz > md5sum.txt
 ```
+
+After uploading from Valetudo's interface, files are located at `/data/personalized_voice/XX` in my
+robot.
