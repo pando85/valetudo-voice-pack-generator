@@ -41,12 +41,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process OGG files and generate text using Whisper.")
 
     parser.add_argument(
-        "--ogg_directory", default="data/original/EN", help="Path to the directory containing OGG files."
+        "--ogg-directory", default="data/original/EN", help="Path to the directory containing OGG files."
     )
     parser.add_argument(
-        "--output_directory", default="data/original/EN_text", help="Path to the directory to store text output."
+        "--output-directory", default="data/original/EN_text", help="Path to the directory to store text output."
     )
-    parser.add_argument("--model_size", default="large-v3", help="Size of the Whisper model.")
+    parser.add_argument("--model-size", default="large-v3", help="Size of the Whisper model.")
     parser.add_argument(
         "--device", default="cpu", help="Device used in WhisperDevice to use for computation ('cpu', 'cuda', 'auto')."
     )
