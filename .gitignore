@@ -5,3 +5,5 @@ data
 *.onnx.json
 *.tar.gz
 *.md5
+*.wav
+*.zip

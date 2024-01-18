@@ -5,6 +5,7 @@ import os
 import sys
 
 from faster_whisper import WhisperModel
+from pydub import AudioSegment
 
 logging.basicConfig(
     level=logging.INFO,  # Set the logging level (INFO, DEBUG, ERROR, etc.)
@@ -12,39 +13,36 @@ logging.basicConfig(
 )
 
 
-def recognize_speech(model, audio_file):
-    segments, _ = model.transcribe(audio_file, language="en", beam_size=5)
-    return " ".join([s.text for s in segments])
+def cut_audio(input_file, output_file, start_time_ms, end_time_ms):
+    audio = AudioSegment.from_wav(input_file)
+    cut_audio = audio[start_time_ms:end_time_ms]
+
+    logging.info(f"`Cutting audio to {output_file}`")
+    cut_audio.export(output_file, format="wav")
 
 
-def process_ogg_files(model, directory, output_directory):
-    # Create the output directory if it does not exist
+def process_ogg_files(model, input_audio, output_directory):
     os.makedirs(output_directory, exist_ok=True)
 
-    for filename in os.listdir(directory):
-        if filename.endswith(".ogg"):
-            ogg_path = os.path.join(directory, filename)
+    logging.info(f"`{input_audio}` processing file with Whisper")
+    segments, _ = model.transcribe(input_audio, language="es", beam_size=5)
 
-            output_path = os.path.join(output_directory, os.path.splitext(filename)[0] + ".txt")
-            if not os.path.exists(output_path):
-                text = recognize_speech(model, ogg_path)
+    for idx, segment in enumerate(segments):
+        output_path_basename = f"{output_directory}/{idx}"
+        txt_file = f"{output_path_basename}.txt"
+        logging.info(f"`{txt_file}` writing file")
+        with open(txt_file, "w") as output_file:
+            output_file.write(segment.text)
 
-                with open(output_path, "w") as output_file:
-                    output_file.write(text)
-
-                logging.info(f"text from {filename} saved to `{output_path}`")
-            else:
-                logging.info(f"`{output_path}` file already exists")
+        cut_audio(input_audio, f"{output_path_basename}.wav", segment.start * 1000, segment.end * 1000)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process OGG files and generate text using Whisper.")
 
+    parser.add_argument("--input-audio", default="data/input.wav", help="Path to input WAV audio.")
     parser.add_argument(
-        "--ogg-directory", default="data/original/EN", help="Path to the directory containing OGG files."
-    )
-    parser.add_argument(
-        "--output-directory", default="data/original/EN_text", help="Path to the directory to store text output."
+        "--output-directory", default="data/split_audio", help="Path to the directory to store text output."
     )
     parser.add_argument("--model-size", default="large-v3", help="Size of the Whisper model.")
     parser.add_argument(
@@ -70,4 +68,4 @@ if __name__ == "__main__":
     # or run on CPU with INT8
     # model = WhisperModel(model_size, device="cpu", compute_type="int8")
 
-    process_ogg_files(model, args.ogg_directory, args.output_directory)
+    process_ogg_files(model, args.input_audio, args.output_directory)

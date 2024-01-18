@@ -19,7 +19,7 @@ scp -O -r root@{{ valetudo_ip }}:{{ robot_audio_files }} data/original/
 
 ```bash
 pip install -r requirements.txt
-python get_sounds_list.py
+./get_sounds_list.py
 ```
 
 ## Create new audios using piper
@@ -39,3 +39,19 @@ md5sum voice_pack.tar.gz > md5sum.txt
 
 After uploading from Valetudo's interface, files are located at `/data/personalized_voice/XX` in my
 robot.
+
+
+## Download and extract audios
+
+```bash
+yt-dlp 'https://www.youtube.com/watch?v=XXXXXXXX'
+ffmpeg -i input.webm -vn -acodec pcm_s16le -ar 22050 -ac 2 output.wav
+```
+
+## Split audio
+
+Run `./split_audio.py` to split audio into different sentences to train the piper model.
+
+## Split files
+
+Run `./split_files.sh` to get the zip files to load into `https://github.com/rhasspy/piper/blob/2fa4c2c13933c1f6b8d87e34d12788ca8e6d073b/notebooks/piper_multilingual_training_notebook.ipynb`.
