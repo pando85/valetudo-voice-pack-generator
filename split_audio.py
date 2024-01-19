@@ -34,7 +34,7 @@ def process_ogg_files(model, input_audio, output_directory):
         with open(txt_file, "w") as output_file:
             output_file.write(segment.text)
 
-        cut_audio(input_audio, f"{output_path_basename}.wav", segment.start * 1000, segment.end * 1000)
+        cut_audio(input_audio, f"{output_path_basename}.wav", segment.start * 1000, (segment.end * 1000) + 200)
 
 
 if __name__ == "__main__":

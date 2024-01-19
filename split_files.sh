@@ -35,10 +35,12 @@ touch "$txt_file"
 
 # Copy files from ${START}.wav to ${END}.wav
 for ((i=START; i<=END; i++)); do
-    filename="${i}.wav"
+    idx=$((i - START + 1))
+    input_filename="${i}.wav"
+    output_filename="${idx}.wav"
     txt_filename="${i}.txt"
-    cp "${src_dir}/${filename}" "${wavs_dir}/${filename}"
-    echo "${filename}|$(cat "${src_dir}/${txt_filename}")" >> "$txt_file"
+    cp "${src_dir}/${input_filename}" "${wavs_dir}/${output_filename}"
+    echo "${output_filename}|$(cat "${src_dir}/${txt_filename}")" >> "$txt_file"
 done
 
 echo "Files copied from ${START}.wav to ${END}.wav to ${dest_dir}"
